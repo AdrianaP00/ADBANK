@@ -1,5 +1,26 @@
 package test;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import components.Account;
 import components.Client;
 import components.Credit;
@@ -9,12 +30,6 @@ import components.Flow;
 import components.FlowType;
 import components.SavingsAccount;
 import components.Transfer;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Map;
 
 //1.1.2 Creation of main class for tests
 public class MainTest {
@@ -142,5 +157,35 @@ public class MainTest {
 			}
 		}
 	}
-	
+
+	/*
+	 * 2.1 JSON file of flows(30mn – 4 pts)
+	 * 
+	 * I'm not able to archive this point only using Java SE
+	 * 
+	 * Because JSONObject is an EE type
+	 * 
+	 * https://docs.oracle.com/javaee%2F7%2Fapi%2F%2F/javax/json/JsonObject.html
+	 */
+
+	/*
+	 * 2.2 XML file of account (30mn – 4 pts)
+	 * 
+	 * As junior I'm not able to archive this point in only 30min
+	 * 
+	 * Because to map Account type I need to manually map Client and Flow types
+	 * 
+	 * Probably this possible using something like jackson lib (as google
+	 * worries)... but I don't know about that... I'm sorry
+	 */
+
+	/*
+	 * Here an example of how to read from a file using java.nio.file.Path
+	 * 
+	 * ... readFromAFile (String filePath){
+	 * 		try (BufferedReader reader =
+	 * 			Files.newBufferedReader(Paths.get(filePath))){ ... }
+	 * 		catch....
+	 */
+
 }

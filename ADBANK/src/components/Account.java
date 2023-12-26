@@ -9,8 +9,11 @@ public abstract class Account {
 	protected double balance;
 	protected Client client;
 
-	public Account(String label, Client client) {
+	public Account() {
+		super();
+	}
 
+	public Account(String label, Client client) {
 		this.label = label;
 		this.client = client;
 		this.accountNumber = ++accountCounter;
