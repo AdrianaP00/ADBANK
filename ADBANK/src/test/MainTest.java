@@ -2,9 +2,14 @@ package test;
 
 import components.Account;
 import components.Client;
+import components.Credit;
 import components.CurrentAccount;
+import components.Debit;
+import components.Flow;
 import components.SavingsAccount;
+import components.Transfer;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -23,6 +28,8 @@ public class MainTest {
 		// 1.3.1 Adaptation of the table of accounts
 		Hashtable<Integer, Account> accountMap = createAccountMap(accounts);
 		displaySortedAccountMap(accountMap);
+		//1.3.4
+		ArrayList<Flow> flows = generateFlows(accounts);
 	}
 
 	// Method to generate a client test set
@@ -76,5 +83,25 @@ public class MainTest {
 		accountTable.entrySet().stream()
 				.sorted(Map.Entry.comparingByValue((a, b) -> Double.compare(a.getBalance(), b.getBalance())))
 				.forEach(entry -> System.out.println(entry.getValue()));
+	}
+	private static ArrayList<Flow> generateFlows(ArrayList<Account>  accounts) {
+		LocalDate currentDate = LocalDate.now().plusDays(2);
+		ArrayList<Flow> flows = new ArrayList<Flow>();
+
+		// 1.3.4 a debit of 50€ from account n°1
+		flows.add(new Debit("Debit operation", 50, 1, currentDate));
+
+		// A credit of 100.50€ on all current accounts in the array of accounts
+		accounts.stream().forEach(
+				account -> flows.add(new Credit("Credit operation", 100.50, account.getAccountNumber(), currentDate)));
+
+		// A credit of 1500€ on all savings accounts in this same array
+		accounts.stream().forEach(
+				account -> flows.add(new Credit("Credit operation", 1500, account.getAccountNumber(), currentDate)));
+
+		// A transfer of 50 € from account n ° 1 to account n ° 2
+		flows.add(new Transfer("Transfer operation", 50, 2, 1, currentDate));
+
+		return flows;
 	}
 }
