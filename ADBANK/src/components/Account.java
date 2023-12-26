@@ -34,9 +34,8 @@ public abstract class Account {
 		return balance;
 	}
 
-	public void setBalance(double amount) {
-
-		this.balance += amount;
+	public void setBalance(Flow amount, FlowType flowType) {
+		modifyBalance(amount, flowType);
 	}
 
 	public Client getClient() {
@@ -46,6 +45,20 @@ public abstract class Account {
 	public void setClient(Client client) {
 
 		this.client = client;
+	}
+	
+	private void modifyBalance(Flow amount, FlowType flowType) {
+		switch (flowType) {
+		case DEBIT:
+			this.balance -= amount.getAmount();
+			break;
+		case CREDIT:
+			this.balance += amount.getAmount();
+			break;
+		case TRANSFER:
+			//to add
+			break;
+		}
 	}
 
 	@Override
