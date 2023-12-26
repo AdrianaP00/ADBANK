@@ -46,7 +46,7 @@ public abstract class Account {
 
 		this.client = client;
 	}
-	
+
 	private void modifyBalance(Flow amount, FlowType flowType) {
 		switch (flowType) {
 		case DEBIT:
@@ -56,8 +56,19 @@ public abstract class Account {
 			this.balance += amount.getAmount();
 			break;
 		case TRANSFER:
-			//to add
+			manageTransfer((Transfer) amount);
 			break;
+		}
+	}
+
+	private void manageTransfer(Transfer transfer) {
+		if (this.accountNumber == transfer.getTargetAccountNumber()) {
+			this.balance += transfer.getAmount();
+		} else if (this.accountNumber == transfer.getIssuingAccountNumber()) {
+			this.balance -= transfer.getAmount();
+		} else {
+			throw new IllegalArgumentException("ERROR: Transfer with id:" + transfer.getFlowId()
+					+ " should not be managed by account: " + this.accountNumber);
 		}
 	}
 

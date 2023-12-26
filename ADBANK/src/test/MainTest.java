@@ -6,6 +6,7 @@ import components.Credit;
 import components.CurrentAccount;
 import components.Debit;
 import components.Flow;
+import components.FlowType;
 import components.SavingsAccount;
 import components.Transfer;
 
@@ -27,9 +28,10 @@ public class MainTest {
 		displayAccounts(accounts);
 		// 1.3.1 Adaptation of the table of accounts
 		Hashtable<Integer, Account> accountMap = createAccountMap(accounts);
-		displaySortedAccountMap(accountMap);
-		//1.3.4
+		// 1.3.4
 		ArrayList<Flow> flows = generateFlows(accounts);
+		updateBalances(flows, accountMap);
+		displaySortedAccountMap(accountMap);
 	}
 
 	// Method to generate a client test set
@@ -84,7 +86,8 @@ public class MainTest {
 				.sorted(Map.Entry.comparingByValue((a, b) -> Double.compare(a.getBalance(), b.getBalance())))
 				.forEach(entry -> System.out.println(entry.getValue()));
 	}
-	private static ArrayList<Flow> generateFlows(ArrayList<Account>  accounts) {
+
+	private static ArrayList<Flow> generateFlows(ArrayList<Account> accounts) {
 		LocalDate currentDate = LocalDate.now().plusDays(2);
 		ArrayList<Flow> flows = new ArrayList<Flow>();
 
@@ -104,4 +107,40 @@ public class MainTest {
 
 		return flows;
 	}
+
+	// Helper method to update balances based on flows
+	private static void updateBalances(ArrayList<Flow> flows, Map<Integer, Account> accountMap) {
+		for (Flow flow : flows) {
+			Account account = accountMap.get(flow.getTargetAccountNumber());
+			if (account != null) {
+				FlowType actualFlowType = FlowType.valueOf(flow.getClass().getSimpleName().toUpperCase());
+				account.setBalance(flow, actualFlowType);
+			}
+		}
+
+		// 1.3.5
+		// Create a method accepting this array of Flows, and the Map of accounts
+		// (paragraph 1.3.1), to
+		// update the balances of the accounts concerned. For each Flow, it will update
+		// the corresponding
+		// (Transfer) accounts
+		updateIssuerBalance(flows, accountMap);
+
+		// Display message for accounts with negative balance
+		accountMap.values().stream().filter(acc -> acc.getBalance() < 0).findFirst()
+				.ifPresent(acc -> System.out.println("Warning: Account with negative balance found."));
+	}
+
+	private static void updateIssuerBalance(ArrayList<Flow> flows, Map<Integer, Account> accountMap) {
+		for (Flow flow : flows) {
+			FlowType actualFlowType = FlowType.valueOf(flow.getClass().getSimpleName().toUpperCase());
+			if (FlowType.TRANSFER.equals(actualFlowType)) {
+				Transfer transferFlow = (Transfer) flow;
+				Account account = accountMap.get(transferFlow.getIssuingAccountNumber());
+
+				account.setBalance(transferFlow, actualFlowType);
+			}
+		}
+	}
+	
 }
