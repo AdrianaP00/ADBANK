@@ -1,8 +1,5 @@
 package components;
 
-import java.util.Hashtable;
-import java.util.Map;
-
 //1.2.1 Creation of the account class
 public abstract class Account {
 	protected static int accountCounter = 0;
@@ -39,7 +36,7 @@ public abstract class Account {
 
 	public void setBalance(double amount) {
 
-		setBalance(amount);
+		this.balance += amount;
 	}
 
 	public Client getClient() {
