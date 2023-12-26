@@ -7,6 +7,8 @@ import components.SavingsAccount;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.Map;
 
 //1.1.2 Creation of main class for tests
 public class MainTest {
@@ -18,6 +20,9 @@ public class MainTest {
 		// 1.2.3 Creation of the tablea account
 		ArrayList<Account> accounts = generateAccounts(clients);
 		displayAccounts(accounts);
+		// 1.3.1 Adaptation of the table of accounts
+		Hashtable<Integer, Account> accountMap = createAccountMap(accounts);
+		displaySortedAccountMap(accountMap);
 	}
 
 	// Method to generate a client test set
@@ -56,5 +61,20 @@ public class MainTest {
 		System.out.println("Accounts:");
 		accounts.stream().map(Account::toString).forEach(System.out::println);
 		System.out.println();
+	}
+
+	public static Hashtable<Integer, Account> createAccountMap(ArrayList<Account> accounts) {
+		Hashtable<Integer, Account> accountTable = new Hashtable<>();
+		for (Account account : accounts) {
+			accountTable.put(account.getAccountNumber(), account);
+		}
+		return accountTable;
+	}
+
+	// Helper method to display sorted account map
+	public static void displaySortedAccountMap(Hashtable<Integer, Account> accountTable) {
+		accountTable.entrySet().stream()
+				.sorted(Map.Entry.comparingByValue((a, b) -> Double.compare(a.getBalance(), b.getBalance())))
+				.forEach(entry -> System.out.println(entry.getValue()));
 	}
 }
